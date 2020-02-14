@@ -1,2 +1,2 @@
-#Acorn Script for University of Toronto
+# Acorn Script for University of Toronto
 
