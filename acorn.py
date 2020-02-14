@@ -70,8 +70,6 @@ class Acorn:
 if __name__ == '__main__':
     browser = webdriver.Chrome()
     browser.get('https://acorn.utoronto.ca/sws/auth/login.do?verify.dispatch')
-    usernameStr = 'cheng126'
-    passwordStr = 'Cheng!St452196@'
     username = browser.find_element_by_id('username')
     username.send_keys(usernameStr)
 
