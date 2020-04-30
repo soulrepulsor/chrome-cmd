@@ -1,28 +1,60 @@
+import time
+
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 import sys
+import os
+
+from dotenv import load_dotenv
 
 class Acorn:
     def __init__(self, browser):
         self._browser = browser
-        self._test = 'https://acorn.utoronto.ca/sws/welcome.do?welcome.dispatch#/courses/0'
+        self._test = 'https://acorn.utoronto.ca/sws/#/courses/0'
 
     def current_courses(self):
-        self._browser.get(self._test)
-        soup = BeautifulSoup(self._browser.page_source, 'html.parser')
 
-        data = soup.find_all(attrs={'class': 'enrolment-code'})
+        finish = False
 
-        for i in data:
-            print(' '.join(i.getText().replace('\n', ' ').split()))
+        url = 'https://acorn.utoronto.ca/sws/#/courses/'
+        index = 0
+
+        while finish is False:
+            new_url = url + str(index)
+            self._browser.get(new_url)
+            wait = WebDriverWait(self._browser, 1)
+            wait.until(EC.presence_of_element_located(
+                (By.CLASS_NAME, 'enrolment-code'))
+            )
+
+            try:
+                soup = BeautifulSoup(self._browser.page_source, 'html.parser')
+                data = soup.find_all(attrs={'class': 'enrolment-code'})
+                title = soup.find_all(attrs={'class': 'tab-heading'})
+
+                print(title[index].get_text())
+                print(data)
+                for i in data:
+                    print(' '.join(i.getText().replace('\n', ' ').split()))
+                print('\n')
+                if index + 1 >= len(title):
+                    break
+
+                index += 1
+
+            except Exception:
+                return
 
         self._browser.quit()
 
     def today_event(self):
-        url = 'https://acorn.utoronto.ca/sws/welcome.do?welcome.dispatch#'
+        url = 'https://acorn.utoronto.ca/sws/#'
         self._browser.get(url)
         soup = BeautifulSoup(self._browser.page_source, 'html.parser')
-        data = soup.find_all('div', attrs={'class': 'event'})
+        data = soup.fincmd_all('div', attrs={'class': 'event'})
 
         for item in data:
             it = item.find_all('div', attrs={'class': 'flex-item'})
@@ -69,7 +101,13 @@ class Acorn:
 
 if __name__ == '__main__':
     browser = webdriver.Chrome()
-    browser.get('https://acorn.utoronto.ca/sws/auth/login.do?verify.dispatch')
+    browser.get('https://acorn.utoronto.ca/sws/#')
+    load_dotenv(
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.env'))
+
+    usernameStr = os.getenv('UOFT_UTORID')
+    passwordStr = os.getenv('UOFT_PASSWORD')
+
     username = browser.find_element_by_id('username')
     username.send_keys(usernameStr)
 
@@ -79,4 +117,4 @@ if __name__ == '__main__':
     login = browser.find_element_by_name('_eventId_proceed')
     login.click()
     test = Acorn(browser)
-    test.today_event()
+    test.current_courses()

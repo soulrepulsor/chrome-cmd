@@ -22,7 +22,7 @@ options.add_experimental_option('excludeSwitches', ['enable-logging'])
 browser = webdriver.Chrome(options=options)
 
 if arg == 'acorn':
-    browser.get('https://acorn.utoronto.ca/sws/auth/login.do?verify.dispatch')
+    browser.get('https://acorn.utoronto.ca/sws/#')
 
 elif arg == 'quercus':
     browser.get('http://q.utoronto.ca/')
