@@ -36,7 +36,7 @@ class Acorn:
                 title = soup.find_all(attrs={'class': 'tab-heading'})
 
                 print(title[index].get_text())
-                print(data)
+
                 for i in data:
                     print(' '.join(i.getText().replace('\n', ' ').split()))
                 print('\n')
