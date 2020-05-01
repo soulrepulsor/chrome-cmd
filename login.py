@@ -45,3 +45,7 @@ if option == 'cc':
 elif option == 'tt':
     test = Acorn(browser)
     test.today_event()
+
+elif option == 'rah':
+    test = Acorn(browser)
+    test.recent_academic_history()

@@ -1,11 +1,10 @@
-import time
-
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
-import sys
+from recent_academic_history import RecentAcademicHistory
+
 import os
 
 from dotenv import load_dotenv
@@ -61,10 +60,10 @@ class Acorn:
 
         for item in data:
             it = item.find_all('div', attrs={'class': 'flex-item'})
-            self.parse_event(it)
+            self._parse_event(it)
         return
 
-    def parse_event(self, data):
+    def _parse_event(self, data):
         info = {
             'Start Time': '',
             'End Time': '',
@@ -102,6 +101,10 @@ class Acorn:
 
         print(message)
 
+    def recent_academic_history(self):
+        rah = RecentAcademicHistory(self._browser)
+        rah.recent_academic_history()
+
 if __name__ == '__main__':
     browser = webdriver.Chrome()
     browser.get('https://acorn.utoronto.ca/sws/#')
@@ -120,4 +123,4 @@ if __name__ == '__main__':
     login = browser.find_element_by_name('_eventId_proceed')
     login.click()
     test = Acorn(browser)
-    test.today_event()
+    test.recent_academic_history()

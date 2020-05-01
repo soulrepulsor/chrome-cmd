@@ -5,6 +5,9 @@ if  "%1%"=="acorn" (
     if "%2%"=="cc" (
         goto navigation
     )
+    if "%2%"=="rah" (
+        goto navigation
+    )
 )
 
 if "%1%"=="acorn" (

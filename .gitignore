@@ -3,3 +3,4 @@ config.env
 acorn.pyc
 debug.log
 /__pycache__
+/Testing
