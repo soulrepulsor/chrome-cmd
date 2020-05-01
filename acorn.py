@@ -54,7 +54,10 @@ class Acorn:
         url = 'https://acorn.utoronto.ca/sws/#'
         self._browser.get(url)
         soup = BeautifulSoup(self._browser.page_source, 'html.parser')
-        data = soup.fincmd_all('div', attrs={'class': 'event'})
+        data = soup.find_all('div', attrs={'class': 'event'})
+
+        if not data:
+            print('You don\'t have any activities scheduled for today')
 
         for item in data:
             it = item.find_all('div', attrs={'class': 'flex-item'})
@@ -117,4 +120,4 @@ if __name__ == '__main__':
     login = browser.find_element_by_name('_eventId_proceed')
     login.click()
     test = Acorn(browser)
-    test.current_courses()
+    test.today_event()
