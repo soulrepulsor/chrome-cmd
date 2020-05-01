@@ -13,11 +13,11 @@ CMD (Windows 10) and maybe earlier versions of Windows
 status or marks as well as the course average if available 
 
 ### Installation Guide
-*Note*: The project is in early stage so the installation is not dummy proof.
+**Note**: The project is in early stage so the installation is not dummy proof.
 Hence, this installation guide is only for people that are interested in the project
 and would like to try it out
 
-1. Install Python 3.XX *(Python 2.XX or earlier version would not work)*
+1. Install Python 3.XX **(Python 2.XX or earlier version would not work)**
 2. Install Chrome browser at the default location (As long as you did not 
 change the installation location, you're fine)
 3. Add Python to the Path Environment Variable if it's not already added
