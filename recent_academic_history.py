@@ -1,3 +1,5 @@
+import os
+
 from tabulate import tabulate
 
 import re
@@ -6,11 +8,13 @@ from bs4 import BeautifulSoup
 class RecentAcademicHistory:
     _url : str
 
+    # def __init__(self):
+    #     path = os.path.dirname(os.path.abspath(__file__))
+    #     self._url = os.path.join(
+    #         path, 'Testing\Academic History.html'
+    #     )
+
     def __init__(self, browser):
-        # path = os.path.dirname(os.path.abspath(__file__))
-        # self._url = os.path.join(
-        #     path, 'Testing\Academic History.html'
-        # )
         self._browser = browser
         self._url = 'https://acorn.utoronto.ca/sws/#/history/academic'
 
@@ -24,7 +28,9 @@ class RecentAcademicHistory:
         result = ''
 
         for i in range(len(data)):
-            result += self._clean_up(str(data[i]))
+            string = self._clean_up(str(data[i]))
+
+            result += string
 
         print(result)
 
@@ -50,7 +56,10 @@ class RecentAcademicHistory:
             course_str = re.sub('\n{2,}', '\n', course_str)
             course_str_list = course_str.split('\n')
 
-            parsed_course_list.append(course_str_list[1:-1])
+            temp = course_str_list[1:-1]
+            temp.extend([' '] * (len(titles) - len(temp)))
+
+            parsed_course_list.append(temp)
 
         result += header.getText().strip() + '\n'
 
@@ -64,3 +73,8 @@ class RecentAcademicHistory:
         result += tabulate(parsed_course_list, headers=titles) + '\n\n'
 
         return result
+
+
+if __name__ == '__main__':
+    test = RecentAcademicHistory()
+    test.recent_academic_history()
