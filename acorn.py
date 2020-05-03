@@ -4,6 +4,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 from recent_academic_history import RecentAcademicHistory
+from current_courses import CurrentCourses
 
 import os
 
@@ -13,41 +14,6 @@ class Acorn:
     def __init__(self, browser):
         self._browser = browser
         self._test = 'https://acorn.utoronto.ca/sws/#/courses/0'
-
-    def current_courses(self):
-
-        finish = False
-
-        url = 'https://acorn.utoronto.ca/sws/#/courses/'
-        index = 0
-
-        while finish is False:
-            new_url = url + str(index)
-            self._browser.get(new_url)
-            wait = WebDriverWait(self._browser, 1)
-            wait.until(EC.presence_of_element_located(
-                (By.CLASS_NAME, 'enrolment-code'))
-            )
-
-            try:
-                soup = BeautifulSoup(self._browser.page_source, 'html.parser')
-                data = soup.find_all(attrs={'class': 'enrolment-code'})
-                title = soup.find_all(attrs={'class': 'tab-heading'})
-
-                print(title[index].get_text())
-
-                for i in data:
-                    print(' '.join(i.getText().replace('\n', ' ').split()))
-                print('\n')
-                if index + 1 >= len(title):
-                    break
-
-                index += 1
-
-            except Exception:
-                return
-
-        self._browser.quit()
 
     def today_event(self):
         url = 'https://acorn.utoronto.ca/sws/#'
@@ -105,6 +71,12 @@ class Acorn:
         rah = RecentAcademicHistory(self._browser)
         rah.recent_academic_history()
 
+    def current_courses(self):
+        cc = CurrentCourses(self._browser)
+        test = cc.current_courses()
+        for item in test:
+            print(item)
+
 if __name__ == '__main__':
     browser = webdriver.Chrome()
     browser.get('https://acorn.utoronto.ca/sws/#')
@@ -123,4 +95,4 @@ if __name__ == '__main__':
     login = browser.find_element_by_name('_eventId_proceed')
     login.click()
     test = Acorn(browser)
-    test.recent_academic_history()
+    test.current_courses()
